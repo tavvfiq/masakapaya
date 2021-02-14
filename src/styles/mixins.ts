@@ -58,7 +58,7 @@ export function padding(
 export function boxShadow({
   color = BLACK,
   offset = { height: 2, width: 2 },
-  radius = 8,
+  radius = 2,
   opacity = 0.2,
 }) {
   return {
