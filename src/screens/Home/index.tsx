@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import Layout from '@components/atoms/Layout';
 import { Colors, Mixins, Typography } from '@styles/index';
-import Card, { CARD_HEIGHT } from '@components/atoms/Card';
+import Card, { CARD_HEIGHT, CARD_WIDTH } from '@components/atoms/Card';
 import Header from '@components/atoms/Header';
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,13 +16,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: CARD_HEIGHT,
-    zIndex: 10,
+    zIndex: 5,
     ...Mixins.margin(10, 0, 0, 0),
+  },
+  errorContainer: {
+    position: 'absolute',
+    zIndex: 6,
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
+    backgroundColor: Colors.OVERLAY,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
   },
   errorMessage: {
     textAlign: 'center',
     fontFamily: Typography.FONT_FAMILY_REGULAR,
     fontSize: Typography.FONT_SIZE_20,
+    color: Colors.WHITE,
   },
   buttonContainer: {
     display: 'flex',
@@ -43,21 +54,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 'auto',
   },
+  activityIndicator: {
+    position: 'absolute',
+    zIndex: 6,
+  },
 });
 
 const MAX_STACK = 3;
 
 const Home = () => {
-  const { foodTinder, error } = useSelector((state: RootState) => state.food);
+  const { foodTinder, error, loading } = useSelector(
+    (state: RootState) => state.food,
+  );
   const page = useRef(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (foodTinder.length <= 5) {
+    if (foodTinder.length <= 5 && !loading) {
       page.current++;
       dispatch(fetchFood(page.current));
     }
   }, [foodTinder.length]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(fetchFood(page.current));
+    }
+  }, [error]);
 
   const onLikedWithButton = () => {
     const key = foodTinder[foodTinder.length - 1].key;
@@ -75,16 +98,27 @@ const Home = () => {
   const onNoped = (key: string) => {
     dispatch(dismissFood(key, false));
   };
-
+  const isConnectionError = error && !loading && foodTinder.length === 0;
+  const isFetching = foodTinder.length === 0 && loading;
+  const isRetrying = error && loading;
+  const isNotEmpty = foodTinder.length !== 0;
   return (
     <Layout>
-      <Header title="Masak Apa Ya" />
+      <Header title="foodinder" />
       <View style={styles.container}>
-        {error ? (
-          <Text>Koneksi error</Text>
-        ) : foodTinder.length === 0 ? (
-          <ActivityIndicator size="large" color={Colors.GRAY_MEDIUM} />
-        ) : (
+        {(isFetching || isRetrying) && (
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            size="large"
+            color={Colors.GRAY_MEDIUM}
+          />
+        )}
+        {isConnectionError && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorMessage}>Koneksi error</Text>
+          </View>
+        )}
+        {isNotEmpty &&
           foodTinder.map((food, index) => {
             return (
               <Card
@@ -96,8 +130,7 @@ const Home = () => {
                 onNoped={onNoped}
               />
             );
-          })
-        )}
+          })}
       </View>
       <View style={styles.buttonContainer}>
         <RoundedButton
@@ -105,13 +138,13 @@ const Home = () => {
           onPress={onNopedWithButton}
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
-          radius={Mixins.scaleSize(50)}>
+          radius={Mixins.heightPercentageToDP('7%')}>
           <Icon name="close-thick" size={24} color={Colors.DOABLE} />
         </RoundedButton>
         <RoundedButton
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
-          radius={Mixins.scaleSize(80)}>
+          radius={Mixins.heightPercentageToDP('10%')}>
           <Icon name="book-open-variant" size={40} color={Colors.WARNING} />
         </RoundedButton>
         <RoundedButton
@@ -119,7 +152,7 @@ const Home = () => {
           onPress={onLikedWithButton}
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
-          radius={Mixins.scaleSize(50)}>
+          radius={Mixins.heightPercentageToDP('7%')}>
           <Icon name="heart" size={24} color={Colors.SUCCESS} />
         </RoundedButton>
       </View>
