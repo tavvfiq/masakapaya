@@ -25,8 +25,8 @@ interface Props {
   onPress?: () => void;
 }
 
-export const CARD_HEIGHT = Mixins.heightPercentageToDP('70%');
-export const CARD_WIDTH = Mixins.scaleSize(330);
+export const CARD_HEIGHT = Mixins.heightPercentageToDP('68%');
+export const CARD_WIDTH = Mixins.widthPercentageToDP('90%');
 
 const styles = StyleSheet.create({
   outerContainer: { position: 'absolute' },
@@ -57,11 +57,13 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: Typography.FONT_FAMILY_MEDIUM,
     fontSize: Typography.FONT_SIZE_20,
+    color: Colors.TEXT_COLOR_PRIMARY,
   },
   additionalText: {
     fontFamily: Typography.FONT_FAMILY_REGULAR,
     fontSize: Typography.FONT_SIZE_14,
     marginLeft: Mixins.scaleSize(10),
+    color: Colors.TEXT_COLOR_SECONDARY,
   },
   additionalBox: {
     display: 'flex',
@@ -159,15 +161,19 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
               </Text>
               <View style={styles.additionalContainer}>
                 <View style={styles.additionalBox}>
-                  <Icon name="clock-check-outline" size={16} />
+                  <Icon
+                    name="clock-check-outline"
+                    size={16}
+                    color={Colors.GRAY_MEDIUM}
+                  />
                   <Text style={styles.additionalText}>{content.times}</Text>
                 </View>
                 <View style={styles.additionalBox}>
-                  <Icon name="food" size={16} />
+                  <Icon name="food" size={16} color={Colors.GRAY_MEDIUM} />
                   <Text style={styles.additionalText}>{content.portion}</Text>
                 </View>
                 <View style={styles.additionalBox}>
-                  <Icon name="hand-okay" size={16} />
+                  <Icon name="hand-okay" size={16} color={Colors.GRAY_MEDIUM} />
                   <Text style={styles.additionalText}>{content.dificulty}</Text>
                 </View>
               </View>
