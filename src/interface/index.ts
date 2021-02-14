@@ -7,3 +7,9 @@ export type FoodType = {
   dificulty: string;
   dismissed?: number;
 };
+
+export type FetchFoodResponseType = {
+  method: string;
+  success: boolean;
+  results: FoodType[];
+};
