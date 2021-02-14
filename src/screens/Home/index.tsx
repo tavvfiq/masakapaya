@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import Layout from '@components/atoms/Layout';
 import { Colors, Mixins, Typography } from '@styles/index';
-import Card, { CARD_HEIGHT, CARD_WIDTH } from '@components/atoms/Card';
+import Card, { CARD_HEIGHT } from '@components/molecules/Card';
 import Header from '@components/atoms/Header';
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,15 +19,15 @@ const styles = StyleSheet.create({
     zIndex: 5,
     ...Mixins.margin(10, 0, 0, 0),
   },
-  errorContainer: {
+  overlay: {
     position: 'absolute',
     zIndex: 6,
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     backgroundColor: Colors.OVERLAY,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    width: Mixins.scaleSize(150),
+    height: Mixins.scaleSize(40),
   },
   errorMessage: {
     textAlign: 'center',
@@ -114,8 +114,8 @@ const Home = () => {
           />
         )}
         {isConnectionError && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorMessage}>Koneksi error</Text>
+          <View style={styles.overlay}>
+            <Text style={styles.errorMessage}>Server error</Text>
           </View>
         )}
         {isNotEmpty &&
