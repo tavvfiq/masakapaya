@@ -4,6 +4,7 @@ import { scaleFont } from './mixins';
 export const FONT_FAMILY_REGULAR = 'GothamRoundedLight';
 export const FONT_FAMILY_MEDIUM = 'GothamRoundedMedium';
 export const FONT_FAMILY_BOLD = 'GothamRoundedBold';
+export const FONT_LOGO = 'ChaletNewYork';
 
 // FONT WEIGHT
 export const FONT_WEIGHT_REGULAR = '400';
