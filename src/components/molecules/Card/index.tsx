@@ -9,12 +9,14 @@ import { Colors, Mixins, Typography } from '@styles/index';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FoodType } from '@interface/index';
 import Animated, {
+  interpolate,
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import Stamp from '@components/atoms/Stamp';
 
 interface Props {
   content: FoodType;
@@ -79,21 +81,37 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
+  stampNope: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    transform: [{ rotateZ: '30deg' }],
+  },
+  stampLike: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    transform: [{ rotateZ: '-30deg' }],
+  },
 });
 
 const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const opacityLike = useSharedValue(0);
+  const opacityNope = useSharedValue(0);
   useEffect(() => {
     if (content.dismissed) {
       if (content.dismissed > 0) {
+        opacityLike.value = withTiming(1);
         rotation.value = withTiming((CARD_WIDTH / 2) * 0.2);
         translateX.value = withTiming(2 * CARD_WIDTH, {}, () => {
           onLiked && runOnJS(onLiked)(content.key);
         });
         translateY.value = withTiming((CARD_WIDTH / 2) * 0.5);
       } else if (content.dismissed < 0) {
+        opacityNope.value = withTiming(1);
         rotation.value = withTiming((-CARD_WIDTH / 2) * 0.2);
         translateX.value = withTiming(-2 * CARD_WIDTH, {}, () => {
           onNoped && runOnJS(onNoped)(content.key);
@@ -104,6 +122,18 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   }, [content.dismissed]);
   const gestureEvent = useAnimatedGestureHandler({
     onActive: ({ translationX }) => {
+      opacityLike.value = interpolate(
+        translationX,
+        [0, CARD_WIDTH / 2],
+        [0, 1],
+        Animated.Extrapolate.CLAMP,
+      );
+      opacityNope.value = -interpolate(
+        translationX,
+        [0, -CARD_WIDTH / 2],
+        [0, -1],
+        Animated.Extrapolate.CLAMP,
+      );
       rotation.value = translationX * 0.2;
       translateX.value = translationX;
       translateY.value = Math.abs(translationX) * 0.5;
@@ -120,6 +150,8 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
           });
         }
       } else {
+        opacityLike.value = withTiming(0);
+        opacityNope.value = withTiming(0);
         translateX.value = withTiming(0);
         translateY.value = withTiming(0);
         rotation.value = withTiming(0);
@@ -140,6 +172,16 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
         { rotateZ: `${rotation.value}deg` },
         { scale },
       ],
+    };
+  });
+  const animateStampLike = useAnimatedStyle(() => {
+    return {
+      opacity: opacityLike.value,
+    };
+  });
+  const animateStampNope = useAnimatedStyle(() => {
+    return {
+      opacity: opacityNope.value,
     };
   });
   const topPosition = Math.abs(maxStack - top) * 8;
@@ -178,6 +220,12 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
                 </View>
               </View>
             </View>
+            <Animated.View style={[styles.stampLike, animateStampLike]}>
+              <Stamp label="LIKE" color={Colors.SUCCESS} />
+            </Animated.View>
+            <Animated.View style={[styles.stampNope, animateStampNope]}>
+              <Stamp label="NOPE" color={Colors.DOABLE} />
+            </Animated.View>
           </Animated.View>
         </PanGestureHandler>
       </Animated.View>
