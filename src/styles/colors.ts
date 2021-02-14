@@ -1,11 +1,12 @@
 export const PRIMARY = '#6379F4';
-export const SECONDARY = '#767676';
+export const SECONDARY = '#CECECE';
 export const WHITE = '#FFFFFF';
 export const BLACK = '#000000';
 export const TEXT_COLOR_PRIMARY = 'rgb(3,23,9)';
 export const TEXT_COLOR_SECONDARY = 'rgb(150,150,150)';
 export const CARD_TITLE_BG = '#f89f1e';
 export const BORDER_COLOR = '#E4E8EA';
+export const OVERLAY = 'rgba(0,0,0,0.2)';
 
 // ACTIONS
 export const SUCCESS = '#3adb76';
