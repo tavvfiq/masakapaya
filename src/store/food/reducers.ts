@@ -48,24 +48,33 @@ export default function foodReducer(
       return {
         ...state,
         foodTinder: _foodTinder,
-        liked: _noped,
+        noped: _noped,
       };
     case 'FETCH_FOOD_PENDING':
       return {
         ...state,
         loading: true,
+        error: false,
       };
     case 'FETCH_FOOD_OK':
-      const _tmp: FoodType[] = (payload as FoodType[]).map((food) => {
-        return {
-          ...food,
-          dismissed: 0,
-        };
-      });
+      const _tmp: FoodType[] = (payload as FoodType[])
+        .map((food) => {
+          return {
+            ...food,
+            dismissed: 0,
+          };
+        })
+        .filter((food) => {
+          return !liked.includes(food);
+        })
+        .filter((food) => {
+          return !noped.includes(food);
+        });
       _foodTinder.unshift(..._tmp);
       return {
         ...state,
         loading: false,
+        error: false,
         foodTinder: _foodTinder,
       };
     case 'FETCH_FOOD_ERROR':
