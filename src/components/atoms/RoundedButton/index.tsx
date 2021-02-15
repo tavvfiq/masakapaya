@@ -3,7 +3,7 @@ import { View, TouchableOpacity, ViewStyle, StyleProp } from 'react-native';
 
 interface Props {
   radius: number;
-  children: React.ReactChild;
+  children?: React.ReactChild;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
