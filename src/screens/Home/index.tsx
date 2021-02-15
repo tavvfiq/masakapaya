@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dismissFood, fetchFood } from '@store/food/actions';
 import RoundedButton from '@components/atoms/RoundedButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import HeaderIcon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +23,8 @@ const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
     zIndex: 6,
-    backgroundColor: Colors.OVERLAY,
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
@@ -31,9 +33,13 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     textAlign: 'center',
-    fontFamily: Typography.FONT_FAMILY_REGULAR,
-    fontSize: Typography.FONT_SIZE_20,
-    color: Colors.WHITE,
+    fontFamily: Typography.FONT_FAMILY_MEDIUM,
+    fontSize: Typography.FONT_SIZE_16,
+    color: Colors.TEXT_COLOR_PRIMARY,
+  },
+  refreshButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainer: {
     display: 'flex',
@@ -76,12 +82,6 @@ const Home = () => {
     }
   }, [foodTinder.length]);
 
-  useEffect(() => {
-    if (error) {
-      dispatch(fetchFood(page.current));
-    }
-  }, [error]);
-
   const onLikedWithButton = () => {
     const key = foodTinder[foodTinder.length - 1].key;
     dispatch(dismissFood(key, undefined, 1));
@@ -98,13 +98,27 @@ const Home = () => {
   const onNoped = (key: string) => {
     dispatch(dismissFood(key, false));
   };
+
+  const onRefresh = () => {
+    dispatch(fetchFood(page.current));
+  };
+
   const isConnectionError = error && !loading && foodTinder.length === 0;
   const isFetching = foodTinder.length === 0 && loading;
   const isRetrying = error && loading;
   const isNotEmpty = foodTinder.length !== 0;
   return (
     <Layout>
-      <Header title="foodinder" />
+      <Header
+        isHome
+        title="foodinder"
+        leftIcon={
+          <HeaderIcon name="cog-outline" size={30} color={Colors.SECONDARY} />
+        }
+        rightIcon={
+          <HeaderIcon name="list-outline" size={30} color={Colors.SECONDARY} />
+        }
+      />
       <View style={styles.container}>
         {(isFetching || isRetrying) && (
           <ActivityIndicator
@@ -116,6 +130,12 @@ const Home = () => {
         {isConnectionError && (
           <View style={styles.overlay}>
             <Text style={styles.errorMessage}>Server error</Text>
+            <RoundedButton
+              onPress={onRefresh}
+              radius={32}
+              containerStyle={styles.refreshButton}>
+              <Icon name="refresh" size={32} color={Colors.SECONDARY} />
+            </RoundedButton>
           </View>
         )}
         {isNotEmpty &&
