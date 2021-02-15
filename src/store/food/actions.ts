@@ -42,7 +42,7 @@ export const fetchFood = (page: number): ActionCreator => {
     dispatch(fetchFoodAction(null));
     try {
       const { results } = await api.fetchFood(page);
-      dispatch(fetchFoodAction(results, false));
+      dispatch(fetchFoodAction(results as FoodType[], false));
     } catch (err) {
       dispatch(fetchFoodAction(err, true));
     }
