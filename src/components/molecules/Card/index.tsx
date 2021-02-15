@@ -6,7 +6,6 @@ import {
   TapGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import { Colors, Mixins, Typography } from '@styles/index';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FoodType } from '@interface/index';
 import Animated, {
   interpolate,
@@ -17,6 +16,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Stamp from '@components/atoms/Stamp';
+import MiniDetail from '@components/atoms/MiniDetail';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   content: FoodType;
@@ -61,26 +62,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.FONT_SIZE_20,
     color: Colors.TEXT_COLOR_PRIMARY,
   },
-  additionalText: {
-    fontFamily: Typography.FONT_FAMILY_REGULAR,
-    fontSize: Typography.FONT_SIZE_14,
-    marginLeft: Mixins.scaleSize(10),
-    color: Colors.TEXT_COLOR_SECONDARY,
-  },
-  additionalBox: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderRadius: 5,
-    ...Mixins.padding(5, 5, 5, 5),
-  },
-  additionalContainer: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
   stampNope: {
     position: 'absolute',
     top: 50,
@@ -101,17 +82,23 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const translateY = useSharedValue(0);
   const opacityLike = useSharedValue(0);
   const opacityNope = useSharedValue(0);
+  const navigation = useNavigation();
+
+  const goToDetail = () => {
+    navigation.navigate('RecipeDetail', { content });
+  };
+
   useEffect(() => {
     if (content.dismissed) {
       if (content.dismissed > 0) {
-        opacityLike.value = withTiming(1);
+        opacityLike.value = withTiming(1, { duration: 100 });
         rotation.value = withTiming((CARD_WIDTH / 2) * 0.2);
         translateX.value = withTiming(2 * CARD_WIDTH, {}, () => {
           onLiked && runOnJS(onLiked)(content.key);
         });
         translateY.value = withTiming((CARD_WIDTH / 2) * 0.5);
       } else if (content.dismissed < 0) {
-        opacityNope.value = withTiming(1);
+        opacityNope.value = withTiming(1, { duration: 100 });
         rotation.value = withTiming((-CARD_WIDTH / 2) * 0.2);
         translateX.value = withTiming(-2 * CARD_WIDTH, {}, () => {
           onNoped && runOnJS(onNoped)(content.key);
@@ -160,7 +147,7 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   });
   const tapEvent = useAnimatedGestureHandler<TapGestureHandlerGestureEvent>({
     onEnd: () => {
-      console.log('tapped');
+      runOnJS(goToDetail)();
     },
   });
   const animatedStyle = useAnimatedStyle(() => {
@@ -196,28 +183,21 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
               animatedStyle,
               { top: topPosition, zIndex },
             ]}>
-            <Image source={{ uri: content.thumb }} style={styles.thumbnail} />
-            <View style={styles.textContainer}>
-              <Text numberOfLines={2} style={styles.titleText}>
-                {content.title}
-              </Text>
-              <View style={styles.additionalContainer}>
-                <View style={styles.additionalBox}>
-                  <Icon
-                    name="clock-check-outline"
-                    size={16}
-                    color={Colors.GRAY_MEDIUM}
-                  />
-                  <Text style={styles.additionalText}>{content.times}</Text>
-                </View>
-                <View style={styles.additionalBox}>
-                  <Icon name="food" size={16} color={Colors.GRAY_MEDIUM} />
-                  <Text style={styles.additionalText}>{content.portion}</Text>
-                </View>
-                <View style={styles.additionalBox}>
-                  <Icon name="hand-okay" size={16} color={Colors.GRAY_MEDIUM} />
-                  <Text style={styles.additionalText}>{content.dificulty}</Text>
-                </View>
+            <View style={styles.container}>
+              <Image
+                source={{ uri: content.thumb }}
+                style={styles.thumbnail}
+                resizeMode="cover"
+              />
+              <View style={styles.textContainer}>
+                <Text numberOfLines={2} style={styles.titleText}>
+                  {content.title}
+                </Text>
+                <MiniDetail
+                  times={content.times}
+                  servings={content.portion}
+                  dificulty={content.dificulty}
+                />
               </View>
             </View>
             <Animated.View style={[styles.stampLike, animateStampLike]}>
