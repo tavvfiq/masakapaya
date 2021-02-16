@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -123,6 +125,10 @@ const RecipeDetail = () => {
 
   const [loading, error, recipeDetail, reload] = useRecipeDetail(content.url);
 
+  const searchIngredient = (key: string) => {
+    Linking.openURL(`https://www.google.com/search?tbm=isch&q=${key}`);
+  };
+
   const goBack = () => {
     navigation.goBack();
   };
@@ -193,9 +199,14 @@ const RecipeDetail = () => {
               <View style={styles.ingredientsList}>
                 {recipeDetail.ingredients.map((item, index) => {
                   return (
-                    <View key={index} style={styles.itemContainer}>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        searchIngredient(item.replace(' ', '%20'));
+                      }}
+                      style={styles.itemContainer}>
                       <Text style={styles.item}>✳️ {item}</Text>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
