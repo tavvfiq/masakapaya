@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { ResponseType } from '@interface/index';
+import { GetResponseType } from '@interface/index';
 
-const apiURL = 'https://masak-apa.tomorisakura.vercel.app/api';
+const apiURL = 'http://192.168.0.16:3000/api';
 
 class Api {
   protected readonly _instance: AxiosInstance;
@@ -24,11 +24,11 @@ class Api {
 
   protected _handleError = (error: any) => error;
 
-  public fetchFood = (page: number): Promise<ResponseType> =>
+  public fetchRecipe = (page: number): Promise<GetResponseType> =>
     this._instance.get(`/recipes/${page}`);
 
-  public fetchRecipeDetail = (key: string): Promise<ResponseType> =>
-    this._instance.get(`/recipe/${key}`);
+  public fetchRecipeDetail = (key: string): Promise<GetResponseType> =>
+    this._instance.get(`/recipe/?q=${key}`);
 }
 
 export default new Api(apiURL);

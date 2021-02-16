@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { RecipeDetailType } from '@interface/index';
 import api from '@utils/api';
 import useAsyncEffect from './useAsyncEffect';
-import useMount from './useMount';
 
 type State = {
   loading: boolean;
@@ -20,16 +19,16 @@ function useRecipeDetail(
   key: string,
 ): [boolean, boolean, RecipeDetailType | null, () => void] {
   const [state, setState] = useState<State>(initState);
-  const isMounted = useMount();
+  const reqMounted = useRef(true);
 
-  const fetchDetail = async () => {
+  const fetchDetail = async (isMounted?: boolean) => {
     setState({ ...state, loading: true, error: false });
     try {
-      const { results } = await api.fetchRecipeDetail(key);
+      const { lists } = await api.fetchRecipeDetail(key);
       isMounted &&
         setState({
-          error: results ? false : true,
-          recipeDetail: results as RecipeDetailType,
+          error: lists ? false : true,
+          recipeDetail: lists as RecipeDetailType,
           loading: false,
         });
     } catch (err) {
@@ -39,12 +38,13 @@ function useRecipeDetail(
   };
 
   const reload = () => {
-    fetchDetail();
+    fetchDetail(reqMounted.current);
   };
 
   useAsyncEffect(
-    async () => {
-      await fetchDetail();
+    async (isMounted) => {
+      reqMounted.current = isMounted();
+      await fetchDetail(reqMounted.current);
     },
     undefined,
     [],

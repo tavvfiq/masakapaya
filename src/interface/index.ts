@@ -1,15 +1,27 @@
-export type FoodType = {
-  title: string;
-  thumb: string;
-  key: string;
-  times: string;
+type Attribute = {
+  cost: string;
+  time: string;
   portion: string;
-  dificulty: string;
+};
+
+export type RecipeType = {
+  id?: string;
+  title: string;
+  pic: string;
+  url: string;
+  attr: Attribute;
   dismissed?: number;
 };
 
-export type FetchFoodResponseType = {
-  method: string;
-  success: boolean;
-  results: FoodType[];
+export type RecipeDetailType = RecipeType & {
+  ingredients: string[];
+  steps: string[];
+  rating: string;
+  [key: string]: string | string[];
+};
+
+export type GetResponseType = {
+  code: number;
+  nextUrl: string;
+  lists: RecipeType[] | RecipeDetailType;
 };
