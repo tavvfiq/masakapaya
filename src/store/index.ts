@@ -1,9 +1,9 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import reduxThunk from 'redux-thunk';
-import foodReducer from './food/reducers';
+import recipeReducer from './recipe/reducers';
 
 const rootReducer = combineReducers({
-  food: foodReducer,
+  recipe: recipeReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

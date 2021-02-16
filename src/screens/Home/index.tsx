@@ -6,10 +6,12 @@ import Card, { CARD_HEIGHT } from '@components/molecules/Card';
 import Header from '@components/atoms/Header';
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { dismissFood, fetchFood } from '@store/food/actions';
+import { dismissRecipe, fetchRecipe } from '@store/recipe/actions';
 import RoundedButton from '@components/atoms/RoundedButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderIcon from 'react-native-vector-icons/Ionicons';
+import { generateRandomPage } from '@utils/math';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -69,49 +71,55 @@ const styles = StyleSheet.create({
 const MAX_STACK = 3;
 
 const Home = () => {
-  const { foodTinder, error, loading } = useSelector(
-    (state: RootState) => state.food,
+  const { recipeTinder, error, loading } = useSelector(
+    (state: RootState) => state.recipe,
   );
   const page = useRef(0);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
-    if (foodTinder.length <= 5 && !loading) {
-      page.current++;
-      dispatch(fetchFood(page.current));
+    if (recipeTinder.length <= 5 && !loading) {
+      page.current = generateRandomPage();
+      dispatch(fetchRecipe(page.current));
     }
-  }, [foodTinder.length]);
+  }, [recipeTinder.length]);
 
   const onLikedWithButton = () => {
-    const key = foodTinder[foodTinder.length - 1].key;
-    dispatch(dismissFood(key, undefined, 1));
+    const key = recipeTinder[recipeTinder.length - 1].url;
+    dispatch(dismissRecipe(key, undefined, 1));
   };
 
   const onNopedWithButton = () => {
-    const key = foodTinder[foodTinder.length - 1].key;
-    dispatch(dismissFood(key, undefined, -1));
+    const key = recipeTinder[recipeTinder.length - 1].url;
+    dispatch(dismissRecipe(key, undefined, -1));
   };
 
   const onLiked = (key: string) => {
-    dispatch(dismissFood(key, true));
+    dispatch(dismissRecipe(key, true));
   };
   const onNoped = (key: string) => {
-    dispatch(dismissFood(key, false));
+    dispatch(dismissRecipe(key, false));
   };
 
   const onRefresh = () => {
-    dispatch(fetchFood(page.current));
+    dispatch(fetchRecipe(page.current));
   };
 
-  const isConnectionError = error && !loading && foodTinder.length === 0;
-  const isFetching = foodTinder.length === 0 && loading;
+  const goToSettings = () => {
+    navigation.navigate('Settings');
+  };
+
+  const isConnectionError = error && !loading && recipeTinder.length === 0;
+  const isFetching = recipeTinder.length === 0 && loading;
   const isRetrying = error && loading;
-  const isNotEmpty = foodTinder.length !== 0;
+  const isNotEmpty = recipeTinder.length !== 0;
   return (
     <Layout>
       <Header
         isHome
-        title="foodinder"
+        title="recipinder"
+        leftIconOnpress={goToSettings}
         leftIcon={
           <HeaderIcon name="cog-outline" size={30} color={Colors.SECONDARY} />
         }
@@ -139,13 +147,13 @@ const Home = () => {
           </View>
         )}
         {isNotEmpty &&
-          foodTinder.map((food, index) => {
+          recipeTinder.map((recipe, index) => {
             return (
               <Card
                 maxStack={MAX_STACK}
                 top={Math.min(index, MAX_STACK)}
-                key={food.key}
-                content={food}
+                key={recipe.url}
+                content={recipe}
                 onLiked={onLiked}
                 onNoped={onNoped}
               />
