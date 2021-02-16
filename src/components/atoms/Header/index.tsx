@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     flex: 1,
   },
+  box: {
+    width: Mixins.scaleSize(32),
+  },
 });
 
 const Header = ({
@@ -51,10 +54,12 @@ const Header = ({
 }: Props) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={leftIconOnpress}>{leftIcon}</TouchableOpacity>
+      <TouchableOpacity onPress={leftIconOnpress}>
+        {leftIcon ? leftIcon : <View style={styles.box} />}
+      </TouchableOpacity>
       <Text style={isHome ? styles.titleHome : styles.title}>{title}</Text>
       <TouchableOpacity onPress={rightIconOnPress}>
-        {rightIcon}
+        {rightIcon ? rightIcon : <View style={styles.box} />}
       </TouchableOpacity>
     </View>
   );
