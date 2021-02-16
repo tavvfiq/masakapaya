@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 const Layout = ({ children }: Props) => {
   return (
     <>
-      <StatusBar />
+      <StatusBar backgroundColor={Colors.WHITE} barStyle="dark-content" />
       <View style={styles.layout}>{children}</View>
     </>
   );
