@@ -6,14 +6,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 interface Props {
   times: string;
   servings: string;
-  dificulty: string;
+  cost: string;
 }
 
 const styles = StyleSheet.create({
   additionalText: {
     fontFamily: Typography.FONT_FAMILY_REGULAR,
     fontSize: Typography.FONT_SIZE_14,
-    marginLeft: Mixins.scaleSize(10),
+    marginLeft: Mixins.scaleSize(5),
     color: Colors.TEXT_COLOR_SECONDARY,
   },
   additionalBox: {
@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const MiniDetail = ({ times, servings, dificulty }: Props) => {
+const MiniDetail = ({ times, servings, cost }: Props) => {
   return (
     <View style={styles.additionalContainer}>
       <View style={styles.additionalBox}>
-        <Icon name="clock-check-outline" size={16} color={Colors.GRAY_MEDIUM} />
+        <Icon name="timer-outline" size={16} color={Colors.GRAY_MEDIUM} />
         <Text style={styles.additionalText}>{times}</Text>
       </View>
       <View style={styles.additionalBox}>
@@ -45,8 +45,8 @@ const MiniDetail = ({ times, servings, dificulty }: Props) => {
         <Text style={styles.additionalText}>{servings}</Text>
       </View>
       <View style={styles.additionalBox}>
-        <Icon name="hand-okay" size={16} color={Colors.GRAY_MEDIUM} />
-        <Text style={styles.additionalText}>{dificulty}</Text>
+        <Icon name="cash-multiple" size={16} color={Colors.GRAY_MEDIUM} />
+        <Text style={styles.additionalText}>{cost}</Text>
       </View>
     </View>
   );
