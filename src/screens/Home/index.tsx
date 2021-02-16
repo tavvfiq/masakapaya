@@ -125,11 +125,11 @@ const Home = () => {
         title="recipinder"
         leftIconOnpress={goToSettings}
         leftIcon={
-          <HeaderIcon name="cog-outline" size={30} color={Colors.SECONDARY} />
+          <HeaderIcon name="cog-outline" size={36} color={Colors.SECONDARY} />
         }
         rightIconOnPress={goToSavedRecipe}
         rightIcon={
-          <HeaderIcon name="list-outline" size={30} color={Colors.SECONDARY} />
+          <HeaderIcon name="list-outline" size={36} color={Colors.SECONDARY} />
         }
       />
       <View style={styles.container}>
