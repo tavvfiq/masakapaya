@@ -1,6 +1,7 @@
-import { FoodType } from '@interface/index';
+import { RecipeType } from '@interface/index';
 
 export type ParamList = {
   Home: undefined;
-  RecipeDetail: { content: FoodType };
+  RecipeDetail: { content: RecipeType };
+  Settings: undefined;
 };
