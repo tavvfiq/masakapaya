@@ -65,7 +65,7 @@ const Settings = () => {
   return (
     <Layout>
       <Header
-        title="Pengaturan"
+        title="Infromasi"
         leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
         leftIconOnpress={goBack}
       />
