@@ -5,15 +5,16 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
+  ListRenderItem,
 } from 'react-native';
 import Header from '@components/atoms/Header';
 import Layout from '@components/atoms/Layout';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Mixins, Typography } from '@styles/index';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import List from '@components/atoms/List';
+import List, { LIST_HEIGHT } from '@components/atoms/List';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -21,6 +22,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { FlatList } from 'react-native-gesture-handler';
+import { clearSavedRecipe } from '@store/recipe/actions';
+import { RecipeType } from '@interface/index';
 
 const { width } = Dimensions.get('window');
 
@@ -76,6 +79,7 @@ const SavedRecipe = () => {
   const [title, setTitle] = useState('Noped');
   const { liked, noped } = useSelector((state: RootState) => state.recipe);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const goBack = () => {
     navigation.goBack();
   };
@@ -93,6 +97,18 @@ const SavedRecipe = () => {
     });
   };
 
+  const renderNoped: ListRenderItem<RecipeType> = ({ item }) => (
+    <List onSwipe={onSwipe} content={item} key={item.url} />
+  );
+
+  const renderLiked: ListRenderItem<RecipeType> = ({ item }) => (
+    <List onSwipe={onSwipe} content={item} key={item.url} />
+  );
+
+  const onSwipe = (key: string) => {
+    dispatch(clearSavedRecipe(key, title));
+  };
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: translateX.value }],
@@ -108,10 +124,15 @@ const SavedRecipe = () => {
       <Animated.View style={[styles.svWrapper, animatedStyle]}>
         {noped.length !== 0 ? (
           <FlatList
+            bounces
             data={noped}
-            renderItem={({ item }) => {
-              return <List content={item} key={item.id} />;
-            }}
+            getItemLayout={(_, index) => ({
+              length: LIST_HEIGHT,
+              offset: LIST_HEIGHT + index,
+              index,
+            })}
+            keyExtractor={(item) => item.url}
+            renderItem={renderNoped}
             contentContainerStyle={styles.sv}
             showsVerticalScrollIndicator={false}
           />
@@ -124,10 +145,15 @@ const SavedRecipe = () => {
         )}
         {liked.length !== 0 ? (
           <FlatList
+            bounces
             data={liked}
-            renderItem={({ item }) => {
-              return <List content={item} key={item.id} />;
-            }}
+            getItemLayout={(_, index) => ({
+              length: LIST_HEIGHT,
+              offset: LIST_HEIGHT + index,
+              index,
+            })}
+            keyExtractor={(item) => item.url}
+            renderItem={renderLiked}
             contentContainerStyle={styles.sv}
             showsVerticalScrollIndicator={false}
           />
