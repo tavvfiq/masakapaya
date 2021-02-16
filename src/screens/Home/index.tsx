@@ -171,22 +171,22 @@ const Home = () => {
           onPress={onNopedWithButton}
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
-          radius={Mixins.heightPercentageToDP('7%')}>
-          <Icon name="close-thick" size={24} color={Colors.DOABLE} />
+          radius={Mixins.heightPercentageToDP('10%')}>
+          <Icon name="close-thick" size={40} color={Colors.DOABLE} />
         </RoundedButton>
-        <RoundedButton
+        {/* <RoundedButton
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
           radius={Mixins.heightPercentageToDP('10%')}>
           <Icon name="book-open-variant" size={40} color={Colors.WARNING} />
-        </RoundedButton>
+        </RoundedButton> */}
         <RoundedButton
           disabled={error}
           onPress={onLikedWithButton}
           style={styles.likeOrNopeButton}
           containerStyle={styles.likeOrNopeContainer}
-          radius={Mixins.heightPercentageToDP('7%')}>
-          <Icon name="heart" size={24} color={Colors.SUCCESS} />
+          radius={Mixins.heightPercentageToDP('10%')}>
+          <Icon name="heart" size={40} color={Colors.SUCCESS} />
         </RoundedButton>
       </View>
     </Layout>
