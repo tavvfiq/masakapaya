@@ -6,6 +6,7 @@ import {
 import Home from '@screens/Home';
 import RecipeDetail from '@screens/RecipeDetail';
 import { ParamList } from './RouteTypes';
+import Settings from '@screens/Settings';
 
 const Stack = createStackNavigator<ParamList>();
 
@@ -21,6 +22,11 @@ const AppStack = () => {
       <Stack.Screen
         name="RecipeDetail"
         component={RecipeDetail}
+        options={{ ...TransitionPresets.SlideFromRightIOS }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </Stack.Navigator>
