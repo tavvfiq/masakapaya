@@ -177,7 +177,7 @@ const RecipeDetail = () => {
           <Header
             title="Detail"
             leftIcon={
-              <Icon name="arrow-left" color={Colors.SECONDARY} size={32} />
+              <Icon name="chevron-left" color={Colors.BLACK} size={36} />
             }
             leftIconOnpress={goBack}
           />

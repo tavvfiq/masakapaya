@@ -66,7 +66,7 @@ const Settings = () => {
     <Layout>
       <Header
         title="Pengaturan"
-        leftIcon={<Icon name="arrow-left" color={Colors.SECONDARY} size={32} />}
+        leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
         leftIconOnpress={goBack}
       />
       <View style={styles.container}>

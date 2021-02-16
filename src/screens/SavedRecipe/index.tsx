@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
+  Text,
 } from 'react-native';
 import Header from '@components/atoms/Header';
 import Layout from '@components/atoms/Layout';
 import { useNavigation } from '@react-navigation/native';
-import { Colors, Mixins } from '@styles/index';
+import { Colors, Mixins, Typography } from '@styles/index';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
@@ -20,6 +20,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { FlatList } from 'react-native-gesture-handler';
 
 const { width } = Dimensions.get('window');
 
@@ -61,6 +62,13 @@ const styles = StyleSheet.create({
   },
   sv: {
     width: Mixins.widthPercentageToDP('100%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Mixins.padding(20, 10, 10, 10),
+  },
+  emptyMessage: {
+    fontFamily: Typography.FONT_FAMILY_MEDIUM,
+    fontSize: Typography.FONT_SIZE_16,
   },
 });
 
@@ -94,28 +102,42 @@ const SavedRecipe = () => {
     <Layout>
       <Header
         title={title}
-        leftIcon={<Icon name="arrow-left" color={Colors.SECONDARY} size={32} />}
+        leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
         leftIconOnpress={goBack}
       />
       <Animated.View style={[styles.svWrapper, animatedStyle]}>
-        <ScrollView
-          contentContainerStyle={styles.sv}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            {noped.map((item) => {
+        {noped.length !== 0 ? (
+          <FlatList
+            data={noped}
+            renderItem={({ item }) => {
               return <List content={item} key={item.id} />;
-            })}
+            }}
+            contentContainerStyle={styles.sv}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View style={styles.sv}>
+            <Text style={styles.emptyMessage}>
+              Belum pernah swipe kiri ya?! 🤔
+            </Text>
           </View>
-        </ScrollView>
-        <ScrollView
-          contentContainerStyle={styles.sv}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            {liked.map((item) => {
+        )}
+        {liked.length !== 0 ? (
+          <FlatList
+            data={liked}
+            renderItem={({ item }) => {
               return <List content={item} key={item.id} />;
-            })}
+            }}
+            contentContainerStyle={styles.sv}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View style={styles.sv}>
+            <Text style={styles.emptyMessage}>
+              Belum pernah swipe kanan ya?! 🤔
+            </Text>
           </View>
-        </ScrollView>
+        )}
       </Animated.View>
       <View style={styles.tabContainer}>
         <TouchableOpacity onPress={selectNoped} style={styles.tab}>
