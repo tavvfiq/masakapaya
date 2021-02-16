@@ -1,4 +1,5 @@
 import { RecipeType } from '@interface/index';
+import { filterArray } from '@utils/math';
 import { RecipeActionType } from './types';
 
 export type foodState = {
@@ -84,6 +85,21 @@ export default function foodReducer(
         error: true,
         loading: false,
       };
+    case 'CLEAR_SAVED_RECIPE_LIKED':
+      return {
+        ...state,
+        liked: filterArray(state.liked, (item) => {
+          return item.url !== (payload as string);
+        }),
+      };
+    case 'CLEAR_SAVED_RECIPE_NOPED':
+      return {
+        ...state,
+        noped: filterArray(state.noped, (item) => {
+          return item.url !== (payload as string);
+        }),
+      };
+
     default:
       return state;
   }

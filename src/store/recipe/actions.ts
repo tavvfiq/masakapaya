@@ -27,6 +27,13 @@ const fetchRecipeAction = (
   };
 };
 
+const clearSavedRecipeAction = (id: string, type: string) => {
+  return {
+    type: `CLEAR_SAVED_RECIPE_${type.toUpperCase()}`,
+    payload: id,
+  };
+};
+
 export const dismissRecipe = (
   key: string,
   liked?: boolean,
@@ -48,5 +55,11 @@ export const fetchRecipe = (page: number): ActionCreator => {
       console.log(err);
       dispatch(fetchRecipeAction(err, true));
     }
+  };
+};
+
+export const clearSavedRecipe = (id: string, type: string): ActionCreator => {
+  return (dispatch) => {
+    dispatch(clearSavedRecipeAction(id, type));
   };
 };
