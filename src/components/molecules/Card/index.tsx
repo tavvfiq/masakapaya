@@ -6,7 +6,7 @@ import {
   TapGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import { Colors, Mixins, Typography } from '@styles/index';
-import { FoodType } from '@interface/index';
+import { RecipeType } from '@interface/index';
 import Animated, {
   interpolate,
   runOnJS,
@@ -20,7 +20,7 @@ import MiniDetail from '@components/atoms/MiniDetail';
 import { useNavigation } from '@react-navigation/native';
 
 interface Props {
-  content: FoodType;
+  content: RecipeType;
   top: number;
   maxStack: number;
   onNoped?: (key: string) => void;
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     width: '100%',
     height: '85%',
-    resizeMode: 'cover',
+    // resizeMode: 'cover',
   },
   textContainer: {
     flex: 1,
@@ -80,9 +80,14 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const opacityBody = useSharedValue(0);
   const opacityLike = useSharedValue(0);
   const opacityNope = useSharedValue(0);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    opacityBody.value = withTiming(1);
+  }, []);
 
   const goToDetail = () => {
     navigation.navigate('RecipeDetail', { content });
@@ -93,16 +98,20 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
       if (content.dismissed > 0) {
         opacityLike.value = withTiming(1, { duration: 100 });
         rotation.value = withTiming((CARD_WIDTH / 2) * 0.2);
-        translateX.value = withTiming(2 * CARD_WIDTH, {}, () => {
-          onLiked && runOnJS(onLiked)(content.key);
+        translateX.value = withTiming(2 * CARD_WIDTH, { duration: 500 }, () => {
+          onLiked && runOnJS(onLiked)(content.url);
         });
         translateY.value = withTiming((CARD_WIDTH / 2) * 0.5);
       } else if (content.dismissed < 0) {
         opacityNope.value = withTiming(1, { duration: 100 });
         rotation.value = withTiming((-CARD_WIDTH / 2) * 0.2);
-        translateX.value = withTiming(-2 * CARD_WIDTH, {}, () => {
-          onNoped && runOnJS(onNoped)(content.key);
-        });
+        translateX.value = withTiming(
+          -2 * CARD_WIDTH,
+          { duration: 500 },
+          () => {
+            onNoped && runOnJS(onNoped)(content.url);
+          },
+        );
         translateY.value = withTiming((CARD_WIDTH / 2) * 0.5);
       }
     }
@@ -129,11 +138,11 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
       if (Math.abs(translateX.value) > CARD_WIDTH / 2) {
         if (translateX.value > 0) {
           translateX.value = withTiming(2 * CARD_WIDTH, {}, () => {
-            onLiked && runOnJS(onLiked)(content.key);
+            onLiked && runOnJS(onLiked)(content.url);
           });
         } else {
           translateX.value = withTiming(-2 * CARD_WIDTH, {}, () => {
-            onNoped && runOnJS(onNoped)(content.key);
+            onNoped && runOnJS(onNoped)(content.url);
           });
         }
       } else {
@@ -153,6 +162,7 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const animatedStyle = useAnimatedStyle(() => {
     const scale = withTiming(1 - (maxStack - top) * 0.01);
     return {
+      opacity: opacityBody.value,
       transform: [
         { translateY: translateY.value },
         { translateX: translateX.value },
@@ -185,7 +195,7 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
             ]}>
             <View style={styles.container}>
               <Image
-                source={{ uri: content.thumb }}
+                source={{ uri: content.pic }}
                 style={styles.thumbnail}
                 resizeMode="cover"
               />
@@ -194,9 +204,9 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
                   {content.title}
                 </Text>
                 <MiniDetail
-                  times={content.times}
-                  servings={content.portion}
-                  dificulty={content.dificulty}
+                  times={content.attr.time}
+                  servings={content.attr.portion}
+                  cost={content.attr.cost}
                 />
               </View>
             </View>
