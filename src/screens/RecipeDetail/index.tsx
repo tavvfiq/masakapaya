@@ -22,6 +22,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import RoundedButton from '@components/atoms/RoundedButton';
+import Separator from '@components/atoms/Separator';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -76,12 +77,6 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_FAMILY_REGULAR,
     textAlign: 'justify',
   },
-  separator: {
-    height: 1,
-    width: '80%',
-    backgroundColor: Colors.BORDER_COLOR,
-    ...Mixins.margin(5, 0, 5, 0),
-  },
   footer: {
     display: 'flex',
     flexDirection: 'column',
@@ -99,6 +94,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginBottom: 5,
+  },
+  itemContainer: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.BORDER_COLOR,
+    marginBottom: 5,
+    backgroundColor: Colors.WHITE,
+    ...Mixins.padding(5, 5, 5, 5),
   },
   item: {
     fontFamily: Typography.FONT_FAMILY_REGULAR,
@@ -183,16 +186,16 @@ const RecipeDetail = () => {
           />
           {recipeDetail ? (
             <>
-              <View style={styles.separator} />
+              <Separator length="80%" color={Colors.BORDER_COLOR} />
               <Text style={styles.desc}>{recipeDetail?.desc}</Text>
-              <View style={styles.separator} />
+              <Separator length="40%" color={Colors.BORDER_COLOR} />
               <Text style={styles.subTitle}>🥗 Bahan-bahan</Text>
               <View style={styles.ingredientsList}>
                 {recipeDetail.ingredients.map((item, index) => {
                   return (
-                    <Text style={styles.item} key={index}>
-                      ✳️ {item}
-                    </Text>
+                    <View key={index} style={styles.itemContainer}>
+                      <Text style={styles.item}>✳️ {item}</Text>
+                    </View>
                   );
                 })}
               </View>
@@ -200,9 +203,11 @@ const RecipeDetail = () => {
               <View style={styles.ingredientsList}>
                 {recipeDetail.steps.map((item, index) => {
                   return (
-                    <Text style={styles.item} key={index}>
-                      🍳 {index + 1}. {item}
-                    </Text>
+                    <View key={index} style={styles.itemContainer}>
+                      <Text style={styles.item}>
+                        🍳 {index + 1}. {item}
+                      </Text>
+                    </View>
                   );
                 })}
               </View>
