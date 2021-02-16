@@ -110,6 +110,10 @@ const Home = () => {
     navigation.navigate('Settings');
   };
 
+  const goToSavedRecipe = () => {
+    navigation.navigate('SavedRecipe');
+  };
+
   const isConnectionError = error && !loading && recipeTinder.length === 0;
   const isFetching = recipeTinder.length === 0 && loading;
   const isRetrying = error && loading;
@@ -123,6 +127,7 @@ const Home = () => {
         leftIcon={
           <HeaderIcon name="cog-outline" size={30} color={Colors.SECONDARY} />
         }
+        rightIconOnPress={goToSavedRecipe}
         rightIcon={
           <HeaderIcon name="list-outline" size={30} color={Colors.SECONDARY} />
         }
