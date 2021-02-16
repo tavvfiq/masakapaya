@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors, Mixins, Typography } from '@styles/index';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
   times: string;
@@ -37,16 +36,19 @@ const MiniDetail = ({ times, servings, cost }: Props) => {
   return (
     <View style={styles.additionalContainer}>
       <View style={styles.additionalBox}>
-        <Icon name="timer-outline" size={16} color={Colors.GRAY_MEDIUM} />
-        <Text style={styles.additionalText}>{times}</Text>
+        <Text style={styles.additionalText}>
+          {'⏲️'} {times}
+        </Text>
       </View>
       <View style={styles.additionalBox}>
-        <Icon name="food" size={16} color={Colors.GRAY_MEDIUM} />
-        <Text style={styles.additionalText}>{servings}</Text>
+        <Text style={styles.additionalText}>
+          {'🍽'} {servings}
+        </Text>
       </View>
       <View style={styles.additionalBox}>
-        <Icon name="cash-multiple" size={16} color={Colors.GRAY_MEDIUM} />
-        <Text style={styles.additionalText}>{cost}</Text>
+        <Text style={styles.additionalText}>
+          {'💵'} {cost}
+        </Text>
       </View>
     </View>
   );

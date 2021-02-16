@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     width: '100%',
     height: '85%',
-    // resizeMode: 'cover',
+    resizeMode: 'cover',
   },
   textContainer: {
     flex: 1,
@@ -86,7 +86,7 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    opacityBody.value = withTiming(1);
+    opacityBody.value = 1;
   }, []);
 
   const goToDetail = () => {
@@ -162,7 +162,7 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const animatedStyle = useAnimatedStyle(() => {
     const scale = withTiming(1 - (maxStack - top) * 0.01);
     return {
-      opacity: opacityBody.value,
+      opacity: withTiming(opacityBody.value),
       transform: [
         { translateY: translateY.value },
         { translateX: translateX.value },
