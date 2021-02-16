@@ -10,4 +10,12 @@ export type FetchRecipeType = {
   payload: RecipeType[] | string | null;
 };
 
-export type RecipeActionType = DismissRecipeType | FetchRecipeType;
+export type ClearSavedRecipe = {
+  type: string;
+  payload: string;
+};
+
+export type RecipeActionType =
+  | DismissRecipeType
+  | FetchRecipeType
+  | ClearSavedRecipe;
