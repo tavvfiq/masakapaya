@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { GetResponseType } from '@interface/index';
 
-const apiURL = 'http://192.168.0.16:3000/api';
+const apiURL = 'https://unofficial-bango-resep-api.tavvfiq.vercel.app/api';
 
 class Api {
   protected readonly _instance: AxiosInstance;

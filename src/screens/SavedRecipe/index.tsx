@@ -86,15 +86,13 @@ const SavedRecipe = () => {
   const translateX = useSharedValue(0);
 
   const selectLiked = () => {
-    translateX.value = withTiming(-width, {}, () => {
-      if (title !== 'Liked') runOnJS(setTitle)('Liked');
-    });
+    translateX.value = withTiming(-width);
+    if (title !== 'Liked') runOnJS(setTitle)('Liked');
   };
 
   const selectNoped = () => {
-    translateX.value = withTiming(0, {}, () => {
-      if (title !== 'Noped') runOnJS(setTitle)('Noped');
-    });
+    translateX.value = withTiming(0);
+    if (title !== 'Noped') runOnJS(setTitle)('Noped');
   };
 
   const renderNoped: ListRenderItem<RecipeType> = ({ item }) => (
@@ -124,7 +122,8 @@ const SavedRecipe = () => {
       <Animated.View style={[styles.svWrapper, animatedStyle]}>
         {noped.length !== 0 ? (
           <FlatList
-            bounces
+            maxToRenderPerBatch={5}
+            bounces={true}
             data={noped}
             getItemLayout={(_, index) => ({
               length: LIST_HEIGHT,
@@ -145,7 +144,8 @@ const SavedRecipe = () => {
         )}
         {liked.length !== 0 ? (
           <FlatList
-            bounces
+            maxToRenderPerBatch={5}
+            bounces={true}
             data={liked}
             getItemLayout={(_, index) => ({
               length: LIST_HEIGHT,
