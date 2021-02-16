@@ -69,7 +69,8 @@
       "@utils/*": ["./utils/*"],
       "@styles/*": ["./styles/*"],
       "@store/*": ["./store/*"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",
