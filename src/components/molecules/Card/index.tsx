@@ -137,13 +137,21 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
     onEnd: () => {
       if (Math.abs(translateX.value) > CARD_WIDTH / 2) {
         if (translateX.value > 0) {
-          translateX.value = withTiming(2 * CARD_WIDTH, {}, () => {
-            onLiked && runOnJS(onLiked)(content.url);
-          });
+          translateX.value = withTiming(
+            2 * CARD_WIDTH,
+            { duration: 150 },
+            () => {
+              onLiked && runOnJS(onLiked)(content.url);
+            },
+          );
         } else {
-          translateX.value = withTiming(-2 * CARD_WIDTH, {}, () => {
-            onNoped && runOnJS(onNoped)(content.url);
-          });
+          translateX.value = withTiming(
+            -2 * CARD_WIDTH,
+            { duration: 150 },
+            () => {
+              onNoped && runOnJS(onNoped)(content.url);
+            },
+          );
         }
       } else {
         opacityLike.value = withTiming(0);
