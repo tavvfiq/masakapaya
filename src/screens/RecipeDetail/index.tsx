@@ -67,17 +67,14 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontFamily: Typography.FONT_FAMILY_MEDIUM,
-    fontSize: Typography.FONT_SIZE_16,
+    fontSize: Typography.FONT_SIZE_18,
     color: Colors.TEXT_COLOR_PRIMARY,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     ...Mixins.margin(4, 0, 4, 0),
   },
   desc: {
     fontFamily: Typography.FONT_FAMILY_REGULAR,
     textAlign: 'justify',
-  },
-  box: {
-    width: Mixins.scaleSize(32),
   },
   separator: {
     height: 1,
@@ -99,6 +96,9 @@ const styles = StyleSheet.create({
   ingredientsList: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 5,
   },
   item: {
     fontFamily: Typography.FONT_FAMILY_REGULAR,
@@ -118,7 +118,7 @@ const RecipeDetail = () => {
   const scrollY = useSharedValue(0);
   const translateY = useSharedValue(0);
 
-  const [loading, error, recipeDetail, reload] = useRecipeDetail(content.key);
+  const [loading, error, recipeDetail, reload] = useRecipeDetail(content.url);
 
   const goBack = () => {
     navigation.goBack();
@@ -146,11 +146,6 @@ const RecipeDetail = () => {
         );
       }
     }
-    console.log({
-      scrollY: scrollY.value,
-      translateY: translateY.value,
-      contentOffsetY: contentOffset.y,
-    });
   };
 
   const animateHeader = useAnimatedStyle(() => {
@@ -176,46 +171,37 @@ const RecipeDetail = () => {
               <Icon name="arrow-left" color={Colors.SECONDARY} size={32} />
             }
             leftIconOnpress={goBack}
-            rightIcon={<View style={styles.box} />}
           />
         </Animated.View>
         <View style={styles.contentContainer}>
-          <Image style={styles.thumbnail} source={{ uri: content.thumb }} />
+          <Image style={styles.thumbnail} source={{ uri: content.pic }} />
           <Text style={styles.titleText}>{content.title}</Text>
           <MiniDetail
-            times={content.times}
-            servings={content.portion}
-            dificulty={content.dificulty}
+            times={content.attr.time}
+            servings={content.attr.portion}
+            cost={content.attr.cost}
           />
           {recipeDetail ? (
             <>
-              <View style={styles.authorContainer}>
-                <Text style={styles.author}>
-                  {recipeDetail?.author.user || 'Tidak diketahui'}
-                </Text>
-                <Text style={styles.publishedDate}>
-                  {recipeDetail?.author.datePublished || 'Tidak diketahui'}
-                </Text>
-              </View>
               <View style={styles.separator} />
               <Text style={styles.desc}>{recipeDetail?.desc}</Text>
               <View style={styles.separator} />
-              <Text style={styles.subTitle}>Bahan-bahan</Text>
+              <Text style={styles.subTitle}>🥗 Bahan-bahan</Text>
               <View style={styles.ingredientsList}>
-                {recipeDetail.ingredient?.map((item, index) => {
+                {recipeDetail.ingredients.map((item, index) => {
                   return (
                     <Text style={styles.item} key={index}>
-                      {item}
+                      ✳️ {item}
                     </Text>
                   );
                 })}
               </View>
-              <Text style={styles.subTitle}>Cara membuat</Text>
+              <Text style={styles.subTitle}>👨‍🍳 Cara membuat</Text>
               <View style={styles.ingredientsList}>
-                {recipeDetail.step?.map((item, index) => {
+                {recipeDetail.steps.map((item, index) => {
                   return (
                     <Text style={styles.item} key={index}>
-                      {item}
+                      🍳 {index + 1}. {item}
                     </Text>
                   );
                 })}
