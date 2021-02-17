@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderColor: Colors.BORDER_COLOR,
+    // borderTopWidth: 1,
+    // borderColor: Colors.BORDER_COLOR,
+    overflow: 'visible',
     // backgroundColor: Colors.WHITE,
   },
   tab: {
@@ -80,8 +81,10 @@ const styles = StyleSheet.create({
     height: Mixins.heightPercentageToDP('7%'),
     width: Mixins.widthPercentageToDP('50%'),
     backgroundColor: Colors.WHITE,
-    borderWidth: 1,
-    borderColor: Colors.WHITE,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderRightColor: Colors.BORDER_COLOR,
+    borderLeftColor: Colors.BORDER_COLOR,
   },
   back: {
     position: 'absolute',
@@ -90,6 +93,8 @@ const styles = StyleSheet.create({
     height: Mixins.heightPercentageToDP('7%'),
     width: Mixins.widthPercentageToDP('100%'),
     backgroundColor: Colors.GRAY,
+    borderTopWidth: 1,
+    borderColor: Colors.BORDER_COLOR,
   },
 });
 
