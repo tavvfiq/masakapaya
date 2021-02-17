@@ -1,5 +1,4 @@
-<h1 align="center">recipinder 🍳</h1> 
-<p align="center"><img src="https://github.com/tavvfiq/masakapaya/blob/master/icon.png" width="100px" height="100px"></p>
+![banner](https://github.com/tavvfiq/masakapaya/blob/master/graphic.png)
 
 ### Description
 ---
