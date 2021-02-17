@@ -73,19 +73,19 @@ const Settings = () => {
         <TouchableOpacity
           onPress={openTwitter}
           style={styles.settingsItemContainer}>
-          <Text style={styles.settingsItem}>🐦 follow on Twitter!</Text>
+          <Text style={styles.settingsItem}>🐦 follow di Twitter</Text>
         </TouchableOpacity>
         <View style={styles.separator} />
         <TouchableOpacity
           onPress={openProjectApp}
           style={styles.settingsItemContainer}>
-          <Text style={styles.settingsItem}>👾 contribute to this project</Text>
+          <Text style={styles.settingsItem}>👾 ikut kontribusi di project</Text>
         </TouchableOpacity>
         <View style={styles.separator} />
         <TouchableOpacity
           onPress={openProjectAPI}
           style={styles.settingsItemContainer}>
-          <Text style={styles.settingsItem}>🚧 check the API</Text>
+          <Text style={styles.settingsItem}>🚧 check API yang dipake</Text>
         </TouchableOpacity>
         <View style={styles.separator} />
         <Text style={styles.version}>App version v{version} </Text>
