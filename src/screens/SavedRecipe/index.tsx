@@ -23,6 +23,7 @@ import Animated, {
 import { FlatList } from 'react-native-gesture-handler';
 import { clearSavedRecipe } from '@store/recipe/actions';
 import { RecipeType } from '@interface/index';
+import useResponsiveDimensions from '@hooks/useResponsiveDimensions';
 
 const { width } = Dimensions.get('window');
 
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: Mixins.widthPercentageToDP('200%'),
-    paddingBottom: Mixins.heightPercentageToDP('11%'),
     minHeight: Mixins.heightPercentageToDP('100%'),
   },
   sv: {
@@ -102,6 +102,8 @@ const SavedRecipe: React.FunctionComponent = () => {
   const goBack = () => {
     navigation.goBack();
   };
+  const [heightPercentageToDP] = useResponsiveDimensions();
+
   const translateX = useSharedValue(0);
 
   const selected = useRef('Noped');
@@ -146,7 +148,12 @@ const SavedRecipe: React.FunctionComponent = () => {
         leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
         leftIconOnpress={goBack}
       />
-      <Animated.View style={[styles.svWrapper, animatedStyle]}>
+      <Animated.View
+        style={[
+          styles.svWrapper,
+          animatedStyle,
+          { paddingBottom: heightPercentageToDP('11%') },
+        ]}>
         {noped.length !== 0 ? (
           <FlatList
             maxToRenderPerBatch={5}
