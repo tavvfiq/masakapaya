@@ -66,8 +66,8 @@ const Settings = () => {
     <Layout>
       <Header
         title="Infromasi"
-        leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
-        leftIconOnpress={goBack}
+        rightIcon={<Icon name="chevron-right" color={Colors.BLACK} size={36} />}
+        rightIconOnPress={goBack}
       />
       <View style={styles.container}>
         <TouchableOpacity

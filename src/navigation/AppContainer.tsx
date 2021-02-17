@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import RNBootSplash from 'react-native-bootsplash';
 import AppStack from './AppStack';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export interface AppProps {}
 
@@ -36,7 +36,10 @@ export default class AppContainer extends React.Component<AppProps, AppState> {
     }
     return (
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
           <Stack.Screen name="AppStack" component={AppStack} />
         </Stack.Navigator>
       </NavigationContainer>

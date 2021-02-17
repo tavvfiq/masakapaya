@@ -11,8 +11,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { enableScreens } from 'react-native-screens';
 import AppContainer from '@navigation/AppContainer';
 import { store, persistor } from '@store/index';
+
+enableScreens();
 
 const App = () => {
   return (

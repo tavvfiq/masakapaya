@@ -85,8 +85,13 @@ const Card = ({ content, top, maxStack, onLiked, onNoped }: Props) => {
   const opacityNope = useSharedValue(0);
   const navigation = useNavigation();
 
-  useEffect(() => {
+  const trigOpacity = () => {
+    'worklet';
     opacityBody.value = 1;
+  };
+
+  useEffect(() => {
+    trigOpacity();
   }, []);
 
   const goToDetail = () => {

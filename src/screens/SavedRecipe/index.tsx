@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import List, { LIST_HEIGHT } from '@components/atoms/List';
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: 1,
     borderColor: Colors.BORDER_COLOR,
-    backgroundColor: Colors.WHITE,
+    // backgroundColor: Colors.WHITE,
   },
   tab: {
     justifyContent: 'center',
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
   verticalSepator: {
     width: 1,
     height: Mixins.heightPercentageToDP('7%'),
-    backgroundColor: Colors.BORDER_COLOR,
+    // backgroundColor: Colors.BORDER_COLOR,
   },
   container: {
     justifyContent: 'center',
@@ -73,10 +72,28 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_FAMILY_MEDIUM,
     fontSize: Typography.FONT_SIZE_16,
   },
+  tabSelector: {
+    // zIndex: 10,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: Mixins.heightPercentageToDP('7%'),
+    width: Mixins.widthPercentageToDP('50%'),
+    backgroundColor: Colors.WHITE,
+  },
+  back: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: Mixins.heightPercentageToDP('7%'),
+    width: Mixins.widthPercentageToDP('100%'),
+    backgroundColor: Colors.GRAY,
+  },
 });
 
-const SavedRecipe = () => {
-  const [title, setTitle] = useState('Noped');
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
+const SavedRecipe: React.FunctionComponent = () => {
   const { liked, noped } = useSelector((state: RootState) => state.recipe);
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -85,14 +102,16 @@ const SavedRecipe = () => {
   };
   const translateX = useSharedValue(0);
 
+  const selected = useRef('Noped');
+
   const selectLiked = () => {
     translateX.value = withTiming(-width);
-    if (title !== 'Liked') runOnJS(setTitle)('Liked');
+    if (selected.current !== 'Liked') selected.current = 'Liked';
   };
 
   const selectNoped = () => {
     translateX.value = withTiming(0);
-    if (title !== 'Noped') runOnJS(setTitle)('Noped');
+    if (selected.current !== 'Noped') selected.current = 'Noped';
   };
 
   const renderNoped: ListRenderItem<RecipeType> = ({ item }) => (
@@ -104,7 +123,7 @@ const SavedRecipe = () => {
   );
 
   const onSwipe = (key: string) => {
-    dispatch(clearSavedRecipe(key, title));
+    dispatch(clearSavedRecipe(key, selected.current));
   };
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -112,10 +131,16 @@ const SavedRecipe = () => {
       transform: [{ translateX: translateX.value }],
     };
   });
+
+  const tab = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: -translateX.value / 2 }],
+    };
+  });
   return (
     <Layout>
       <Header
-        title={title}
+        title="Resep"
         leftIcon={<Icon name="chevron-left" color={Colors.BLACK} size={36} />}
         leftIconOnpress={goBack}
       />
@@ -166,12 +191,18 @@ const SavedRecipe = () => {
         )}
       </Animated.View>
       <View style={styles.tabContainer}>
+        <View style={styles.back} />
+        <Animated.View style={[tab, styles.tabSelector]} />
         <TouchableOpacity onPress={selectNoped} style={styles.tab}>
-          <Icon name="close-thick" size={24} color={Colors.DOABLE} />
+          <AnimatedIcon
+            name="close-thick"
+            size={24}
+            style={{ color: Colors.DOABLE }}
+          />
         </TouchableOpacity>
         <View style={styles.verticalSepator} />
         <TouchableOpacity onPress={selectLiked} style={styles.tab}>
-          <Icon name="heart" size={24} color={Colors.SUCCESS} />
+          <AnimatedIcon name="heart" size={24} color={Colors.SUCCESS} />
         </TouchableOpacity>
       </View>
     </Layout>
