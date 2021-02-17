@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     height: Mixins.heightPercentageToDP('7%'),
     width: Mixins.widthPercentageToDP('50%'),
     backgroundColor: Colors.WHITE,
+    borderWidth: 1,
+    borderColor: Colors.WHITE,
   },
   back: {
     position: 'absolute',
