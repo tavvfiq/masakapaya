@@ -1,10 +1,14 @@
+import { Platform } from 'react-native';
 import { scaleFont } from './mixins';
 
 // FONT FAMILY
-export const FONT_FAMILY_REGULAR = 'GothamRoundedLight';
-export const FONT_FAMILY_MEDIUM = 'GothamRoundedMedium';
-export const FONT_FAMILY_BOLD = 'GothamRoundedBold';
-export const FONT_LOGO = 'ChaletNewYork';
+export const FONT_FAMILY_REGULAR =
+  Platform.OS === 'android' ? 'GothamRoundedLight' : 'Gotham Rounded Light';
+export const FONT_FAMILY_MEDIUM =
+  Platform.OS === 'android' ? 'GothamRoundedMedium' : 'Gotham Rounded Medium';
+export const FONT_FAMILY_BOLD =
+  Platform.OS === 'android' ? 'GothamRoundedBold' : 'Gotham Rounded Bold';
+export const FONT_LOGO = Platform.OS === 'android' ? 'ChaletNewYork' : 'Chalet';
 
 // FONT WEIGHT
 export const FONT_WEIGHT_REGULAR = '400';

@@ -31,7 +31,6 @@ export const LIST_WIDTH = Mixins.widthPercentageToDP('90%');
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -45,6 +44,7 @@ const styles = StyleSheet.create({
     ...Mixins.padding(5, 5, 5, 5),
   },
   thumbContainer: {
+    zIndex: 10,
     top: -10,
     left: 0,
     position: 'absolute',
@@ -151,15 +151,15 @@ const List = ({ content, onSwipe }: Props) => {
       <Animated.View style={[styles.clearContainer, fade]}>
         <Icon name="broom" size={40} color={Colors.ALERT} />
       </Animated.View>
-      <TapGestureHandler onGestureEvent={onTapEvent}>
-        <Animated.View style={[styles.container, swipeable]}>
-          <PanGestureHandler onGestureEvent={onGestureEvent}>
-            <Animated.View style={styles.thumbContainer}>
-              <Image style={styles.thumbnail} source={{ uri: content.pic }} />
-            </Animated.View>
-          </PanGestureHandler>
-          <View style={styles.placeholder} />
-          <View style={styles.leftContent}>
+      <Animated.View style={[styles.container, swipeable]}>
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={styles.thumbContainer}>
+            <Image style={styles.thumbnail} source={{ uri: content.pic }} />
+          </Animated.View>
+        </PanGestureHandler>
+        <View style={styles.placeholder} />
+        <TapGestureHandler onGestureEvent={onTapEvent}>
+          <Animated.View style={styles.leftContent}>
             <Text numberOfLines={2} style={styles.textContent}>
               {content.title}
             </Text>
@@ -169,9 +169,9 @@ const List = ({ content, onSwipe }: Props) => {
             <Text style={styles.detail}>
               {'💵'} {content.attr.cost}
             </Text>
-          </View>
-        </Animated.View>
-      </TapGestureHandler>
+          </Animated.View>
+        </TapGestureHandler>
+      </Animated.View>
     </>
   );
 };

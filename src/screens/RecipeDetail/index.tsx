@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
   TouchableOpacity,
   Linking,
+  Platform,
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,6 +26,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import RoundedButton from '@components/atoms/RoundedButton';
 import Separator from '@components/atoms/Separator';
+import Layout from '@components/atoms/Layout';
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -126,7 +128,8 @@ const RecipeDetail = () => {
   const [loading, error, recipeDetail, reload] = useRecipeDetail(content.url);
 
   const searchIngredient = (key: string) => {
-    Linking.openURL(`https://www.google.com/search?tbm=isch&q=${key}`);
+    const query = Platform.OS === 'android' ? key.replace(' ', '%20') : key;
+    Linking.openURL(`https://www.google.com/search?tbm=isch&q=${query}`);
   };
 
   const goBack = () => {
@@ -166,7 +169,7 @@ const RecipeDetail = () => {
   });
 
   return (
-    <>
+    <Layout>
       <ScrollView
         stickyHeaderIndices={[0]}
         onScroll={onScrollEvent}
@@ -202,7 +205,7 @@ const RecipeDetail = () => {
                     <TouchableOpacity
                       key={index}
                       onPress={() => {
-                        searchIngredient(item.replace(' ', '%20'));
+                        searchIngredient(item);
                       }}
                       style={styles.itemContainer}>
                       <Text style={styles.item}>✳️ {item}</Text>
@@ -242,7 +245,7 @@ const RecipeDetail = () => {
           )}
         </View>
       </ScrollView>
-    </>
+    </Layout>
   );
 };
 

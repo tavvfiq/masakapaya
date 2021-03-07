@@ -86,13 +86,13 @@ const Home = () => {
   }, [recipeTinder.length]);
 
   const onLikedWithButton = () => {
-    const key = recipeTinder[recipeTinder.length - 1].url;
-    dispatch(dismissRecipe(key, undefined, 1));
+    const key = recipeTinder[recipeTinder.length - 1]?.url;
+    key && dispatch(dismissRecipe(key, undefined, 1));
   };
 
   const onNopedWithButton = () => {
-    const key = recipeTinder[recipeTinder.length - 1].url;
-    dispatch(dismissRecipe(key, undefined, -1));
+    const key = recipeTinder[recipeTinder.length - 1]?.url;
+    key && dispatch(dismissRecipe(key, undefined, -1));
   };
 
   const onLiked = (key: string) => {

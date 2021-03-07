@@ -1,6 +1,6 @@
 import { Colors } from '@styles/index';
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, SafeAreaView } from 'react-native';
 
 interface Props {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <StatusBar backgroundColor={Colors.WHITE} barStyle="dark-content" />
-      <View style={styles.layout}>{children}</View>
+      <SafeAreaView style={styles.layout}>{children}</SafeAreaView>
     </>
   );
 };

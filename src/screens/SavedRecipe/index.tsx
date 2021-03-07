@@ -6,6 +6,7 @@ import {
   Dimensions,
   Text,
   ListRenderItem,
+  Platform,
 } from 'react-native';
 import Header from '@components/atoms/Header';
 import Layout from '@components/atoms/Layout';
@@ -157,7 +158,12 @@ const SavedRecipe: React.FunctionComponent = () => {
         style={[
           styles.svWrapper,
           animatedStyle,
-          { paddingBottom: heightPercentageToDP('11%') },
+          {
+            paddingBottom:
+              Platform.OS === 'android'
+                ? heightPercentageToDP('11%')
+                : heightPercentageToDP('18%'),
+          },
         ]}>
         {noped.length !== 0 ? (
           <FlatList
